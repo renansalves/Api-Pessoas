@@ -1,0 +1,58 @@
+{
+
+  "nome": "Mochileiro Python",
+  "cpf": "623.112.021-99",
+  "dataNascimento": "2008-11-07",
+  "enderecos": [
+    {
+      "rua": "Rua C",
+      "numero": 11,
+      "bairro": "Django",
+      "cidade": "Identação",
+      "estado": "Python",
+      "cep": "99999-00"
+    }
+  ]
+}
+
+{
+
+  "nome": "João dev senior",
+  "cpf": "012.345.678-90",
+  "dataNascimento": "2002-02-02",
+  "enderecos": [
+    {
+      "rua": "Rua A",
+      "numero": 7,
+      "bairro": "Java",
+      "cidade": "Script",
+      "estado": "JVM",
+      "cep": "99999-00"
+    }
+  ]
+}
+
+{
+
+  "nome": "Hacker anonimo",
+  "cpf": "101.001.111-10",
+  "dataNascimento": "1999-12-12",
+  "enderecos": [
+    {
+      "rua": "Rua A",
+      "numero": 7,
+      "bairro": "Java",
+      "cidade": "Script",
+      "estado": "JVM",
+      "cep": "99999-00"
+    },
+    {
+      "rua": "Rua B", 
+      "numero": 1101,
+      "bairro": "Ruby",
+      "cidade": "Rails",
+      "estado": "Oracle",
+      "cep": "10011-01"
+    }
+  ]
+}
