@@ -1,4 +1,4 @@
-package br.tec.db.Pessoa.map; // Suggested new package
+package br.tec.db.Pessoa.map; 
 
 import org.mapstruct.Mapper;
 
