@@ -5,6 +5,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.tec.db.Pessoa.dto.PessoaDto;
@@ -14,18 +15,19 @@ import br.tec.db.Pessoa.map.PessoaMapperInterface;
 import br.tec.db.Pessoa.modelo.Endereco;
 import br.tec.db.Pessoa.modelo.Pessoa;
 import br.tec.db.Pessoa.repositorio.RepositorioPessoa;
-import lombok.RequiredArgsConstructor;
 
 /**
  * ServicoPessoa
  */
 @Service
-@RequiredArgsConstructor
 public class ServicoPessoa {
 
-  private final EnderecoMapperInterface enderecoMapper;
-  private final PessoaMapperInterface pessoaMapper;
-  private final RepositorioPessoa repositorioPessoa;
+  @Autowired
+  private EnderecoMapperInterface enderecoMapper;
+  @Autowired
+  private PessoaMapperInterface pessoaMapper;
+  @Autowired
+  private RepositorioPessoa repositorioPessoa;
 
   public PessoaDto salvarPessoa(PessoaDto pessoaDto) {
     Pessoa pessoaEntidade = pessoaMapper.toEntity(pessoaDto);
