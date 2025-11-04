@@ -1,5 +1,5 @@
 
-package br.tec.db.Pessoa.configuracao;
+package br.tec.db.Pessoa.swagger;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

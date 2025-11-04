@@ -1,5 +1,5 @@
 
-package br.tec.db.Pessoa.modelo;
+package br.tec.db.Pessoa.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

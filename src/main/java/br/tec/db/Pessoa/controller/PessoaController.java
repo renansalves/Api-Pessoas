@@ -1,21 +1,21 @@
-package br.tec.db.Pessoa.controlador;
+package br.tec.db.Pessoa.controller;
 
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping; 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping; 
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.tec.db.Pessoa.Servico.ServicoPessoa;
+import br.tec.db.Pessoa.service.PessoaService;
 import br.tec.db.Pessoa.dto.PessoaDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,10 +24,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("pessoa")
 @Tag(name = "Pessoa", description = "Operações relacionadas ao cadastro de Pessoas")
-public class ControladorPessoa {
+public class PessoaController {
 
   @Autowired
-  private ServicoPessoa servicoPessoa;
+  private PessoaService servicoPessoa;
 
   @Operation(summary = "Cria uma nova Pessoa", description = "Salva uma nova Pessoa, incluindo seus Endereços.", responses = {
       @ApiResponse(responseCode = "201", description = "Pessoa criada com sucesso"),
