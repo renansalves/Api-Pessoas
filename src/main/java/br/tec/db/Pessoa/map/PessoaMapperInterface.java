@@ -10,15 +10,15 @@ import org.mapstruct.Named;
 import br.tec.db.Pessoa.dto.PessoaDto;
 import br.tec.db.Pessoa.modelo.Pessoa;
 
-/**
- * PessoaMapperInterface
- */
 @Mapper(componentModel = "spring", uses = { EnderecoMapperInterface.class })
 public interface PessoaMapperInterface {
 
+
+  @Mapping(target = "idade", source = "dataNascimento", qualifiedByName = "calcularIdade")
   PessoaDto toDto(Pessoa pessoa);
 
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "idade", ignore = true) 
   Pessoa toEntity(PessoaDto pessoaDto);
 
   @Named("calcularIdade")

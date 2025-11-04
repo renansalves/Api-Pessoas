@@ -5,6 +5,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.tec.db.Pessoa.dto.PessoaDto;
@@ -14,18 +15,19 @@ import br.tec.db.Pessoa.map.PessoaMapperInterface;
 import br.tec.db.Pessoa.modelo.Endereco;
 import br.tec.db.Pessoa.modelo.Pessoa;
 import br.tec.db.Pessoa.repositorio.RepositorioPessoa;
-import lombok.RequiredArgsConstructor;
 
 /**
  * ServicoPessoa
  */
 @Service
-@RequiredArgsConstructor
 public class ServicoPessoa {
 
-  private final EnderecoMapperInterface enderecoMapper;
-  private final PessoaMapperInterface pessoaMapper;
-  private final RepositorioPessoa repositorioPessoa;
+  @Autowired
+  private EnderecoMapperInterface enderecoMapper;
+  @Autowired
+  private PessoaMapperInterface pessoaMapper;
+  @Autowired
+  private RepositorioPessoa repositorioPessoa;
 
   public PessoaDto salvarPessoa(PessoaDto pessoaDto) {
     Pessoa pessoaEntidade = pessoaMapper.toEntity(pessoaDto);
@@ -35,8 +37,7 @@ public class ServicoPessoa {
   }
 
   public PessoaDto listarUmaPessoaPorId(Long id) {
-    Pessoa pessoa = repositorioPessoa.findById(id)
-        .orElseThrow(() -> new PessoaNaoEncontradaExcecao("Pessoa não encontrada com id: " + id));
+    Pessoa pessoa = retornaPessoaEncontrada(id);
 
     return pessoaMapper.toDto(pessoa);
   }
@@ -48,8 +49,7 @@ public class ServicoPessoa {
   }
 
   public PessoaDto atualizarPessoa(Long id, PessoaDto pessoaDto) {
-    Pessoa entidadePessoa = repositorioPessoa.findById(id)
-        .orElseThrow(() -> new PessoaNaoEncontradaExcecao("Pessoa não encontrada para atualização com id: " + id));
+      Pessoa entidadePessoa = retornaPessoaEncontrada(id); 
 
     if (pessoaDto.nome() != null)
       entidadePessoa.setNome(pessoaDto.nome());
@@ -73,20 +73,21 @@ public class ServicoPessoa {
   }
 
   public void deletarPessoa(Long id) {
-    Pessoa pessoa = repositorioPessoa.findById(id)
-        .orElseThrow(() -> new PessoaNaoEncontradaExcecao("Pessoa não encontrada para deleção com id: " + id));
+    Pessoa pessoa = retornaPessoaEncontrada(id);
 
     repositorioPessoa.delete(pessoa);
   }
 
   public int calculaIdadePessoa(Long id) {
-    Pessoa pessoa = repositorioPessoa.findById(id)
-        .orElseThrow(() -> new PessoaNaoEncontradaExcecao("Pessoa não encontrada com id: " + id));
-
+    Pessoa pessoa = retornaPessoaEncontrada(id);
     LocalDate hoje = LocalDate.now();
     Period idade = Period.between(pessoa.getDataNascimento(), hoje);
 
     return idade.getYears();
 
+  }
+  public Pessoa retornaPessoaEncontrada(Long id){
+    return repositorioPessoa.findById(id)
+        .orElseThrow(() -> new PessoaNaoEncontradaExcecao("Pessoa não encontrada para deleção com id: " + id));
   }
 }
