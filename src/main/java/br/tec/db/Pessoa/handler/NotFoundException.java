@@ -1,18 +1,18 @@
-package br.tec.db.Pessoa.excecao;
+package br.tec.db.Pessoa.handler;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class PessoaNaoEncontradaExcecao extends RuntimeException {
+public class NotFoundException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  public PessoaNaoEncontradaExcecao(String message) {
+  public NotFoundException(String message) {
     super(message);
   }
 
-  public PessoaNaoEncontradaExcecao(String message, Throwable cause) {
+  public NotFoundException(String message, Throwable cause) {
     super(message, cause);
   }
 }
