@@ -1,4 +1,4 @@
-package br.tec.db.Pessoa.controladorPessoaTest;
+package br.tec.db.Pessoa.controllerTest;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +36,7 @@ import br.tec.db.Pessoa.service.PessoaService;
 
 @WebMvcTest(PessoaController.class)
 
-public class ControladorPessoaTest {
+public class PessoaControllerTest {
 
   @MockBean
   private PessoaService servicoPessoa;

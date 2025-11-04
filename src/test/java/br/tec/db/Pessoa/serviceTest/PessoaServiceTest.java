@@ -1,4 +1,4 @@
-package br.tec.db.Pessoa.servicoTest;
+package br.tec.db.Pessoa.serviceTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +27,7 @@ import br.tec.db.Pessoa.service.PessoaService;
 
 @ExtendWith(MockitoExtension.class)
 
-public class ServicoPessoaTest {
+public class PessoaServiceTest {
 
   @InjectMocks
   private PessoaService servicoPessoa;
