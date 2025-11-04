@@ -1,9 +1,13 @@
-package br.tec.db.Pessoa.controladorPessoaTest;
+package br.tec.db.Pessoa.controllerTest;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,30 +21,25 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.tec.db.Pessoa.Servico.ServicoPessoa;
-import br.tec.db.Pessoa.controlador.*;
+import br.tec.db.Pessoa.controller.PessoaController;
 import br.tec.db.Pessoa.dto.PessoaDto;
-import br.tec.db.Pessoa.excecao.PessoaNaoEncontradaExcecao;
+import br.tec.db.Pessoa.handler.NotFoundException;
+import br.tec.db.Pessoa.service.PessoaService;
 
-@WebMvcTest(ControladorPessoa.class)
+@WebMvcTest(PessoaController.class)
 
-public class ControladorPessoaTest {
+public class PessoaControllerTest {
 
   @MockBean
-  private ServicoPessoa servicoPessoa;
+  private PessoaService servicoPessoa;
 
   @Autowired
   private MockMvc mockMvc;
@@ -87,7 +86,7 @@ public class ControladorPessoaTest {
   @Test
   void listarUmaPessoaPorId_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
 
-    when(servicoPessoa.listarUmaPessoaPorId(99L)).thenThrow(PessoaNaoEncontradaExcecao.class);
+    when(servicoPessoa.listarUmaPessoaPorId(99L)).thenThrow(NotFoundException.class);
 
     mockMvc.perform(get(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON))
@@ -110,7 +109,7 @@ public class ControladorPessoaTest {
   @Test
   void deletarPessoa_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
 
-    doThrow(PessoaNaoEncontradaExcecao.class).when(servicoPessoa).deletarPessoa(99L);
+    doThrow(NotFoundException.class).when(servicoPessoa).deletarPessoa(99L);
 
     mockMvc.perform(delete(BASE_URL + "/{id}", 99L))
 
@@ -138,7 +137,7 @@ public class ControladorPessoaTest {
   @Test
   void atualizarPessoa_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
 
-    when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaDto.class))).thenThrow(PessoaNaoEncontradaExcecao.class);
+    when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaDto.class))).thenThrow(NotFoundException.class);
 
     mockMvc.perform(put(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON)

@@ -1,12 +1,9 @@
-package br.tec.db.Pessoa.repositorio;
+package br.tec.db.Pessoa.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.tec.db.Pessoa.modelo.Endereco;
+import br.tec.db.Pessoa.model.Endereco;
 
-/**
- * RepositorioEndereco
- */
 public interface RepositorioEndereco extends JpaRepository<Endereco, Long> {
 
 }

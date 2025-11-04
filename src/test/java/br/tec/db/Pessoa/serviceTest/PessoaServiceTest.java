@@ -1,6 +1,8 @@
-package br.tec.db.Pessoa.servicoTest;
+package br.tec.db.Pessoa.serviceTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
@@ -14,24 +16,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import br.tec.db.Pessoa.Servico.ServicoPessoa;
 import br.tec.db.Pessoa.dto.EnderecoDto;
 import br.tec.db.Pessoa.dto.PessoaDto;
-import br.tec.db.Pessoa.excecao.PessoaNaoEncontradaExcecao;
+import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.map.EnderecoMapperInterface;
 import br.tec.db.Pessoa.map.PessoaMapperInterface;
-import br.tec.db.Pessoa.modelo.Pessoa;
-import br.tec.db.Pessoa.repositorio.RepositorioPessoa;
+import br.tec.db.Pessoa.model.Pessoa;
+import br.tec.db.Pessoa.repository.PessoaRepository;
+import br.tec.db.Pessoa.service.PessoaService;
 
 @ExtendWith(MockitoExtension.class)
 
-public class ServicoPessoaTest {
+public class PessoaServiceTest {
 
   @InjectMocks
-  private ServicoPessoa servicoPessoa;
+  private PessoaService servicoPessoa;
 
   @Mock
-  private RepositorioPessoa repositorioPessoa;
+  private PessoaRepository repositorioPessoa;
   @Mock
   private PessoaMapperInterface pessoaMapper;
   @Mock
@@ -89,7 +91,7 @@ public class ServicoPessoaTest {
 
     when(repositorioPessoa.findById(anyLong())).thenReturn(Optional.empty());
 
-    assertThrows(PessoaNaoEncontradaExcecao.class, () -> servicoPessoa.listarUmaPessoaPorId(99L));
+    assertThrows(NotFoundException.class, () -> servicoPessoa.listarUmaPessoaPorId(99L));
     verify(repositorioPessoa, times(1)).findById(99L);
   }
 
