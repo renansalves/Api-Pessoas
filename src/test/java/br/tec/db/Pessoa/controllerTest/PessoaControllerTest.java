@@ -77,7 +77,6 @@ public class PessoaControllerTest {
 
     mockMvc.perform(get(BASE_URL + "/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON))
-
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id", is(1)));
   }
@@ -89,7 +88,6 @@ public class PessoaControllerTest {
 
     mockMvc.perform(get(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON))
-
         .andExpect(status().isNotFound());
   }
 
@@ -99,7 +97,6 @@ public class PessoaControllerTest {
     doNothing().when(servicoPessoa).deletarPessoa(1L);
 
     mockMvc.perform(delete(BASE_URL + "/{id}", 1L))
-
         .andExpect(status().isNoContent());
 
     verify(servicoPessoa, times(1)).deletarPessoa(1L);
@@ -111,7 +108,6 @@ public class PessoaControllerTest {
     doThrow(NotFoundException.class).when(servicoPessoa).deletarPessoa(99L);
 
     mockMvc.perform(delete(BASE_URL + "/{id}", 99L))
-
         .andExpect(status().isNotFound());
   }
 
@@ -126,7 +122,6 @@ public class PessoaControllerTest {
     mockMvc.perform(put(BASE_URL + "/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(pessoaDto)))
-
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.nome", is("Atualizado")));
 
@@ -141,7 +136,6 @@ public class PessoaControllerTest {
     mockMvc.perform(put(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(pessoaDto)))
-
         .andExpect(status().isNotFound());
   }
 }

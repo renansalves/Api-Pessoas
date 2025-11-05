@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -55,7 +56,7 @@ public class PessoaServiceTest {
     
     this.pessoaEntity = pessoaBuilder.construir(); 
     this.pessoaDto = new PessoaDto(
-        1L, 
+        null,
         "Renan Alves", 
         this.pessoaEntity.getCpf(), 
         this.pessoaEntity.getDataNascimento(), 
@@ -70,10 +71,10 @@ public class PessoaServiceTest {
 
     Pessoa pessoaParaSalvar = pessoaBuilder.construir(); 
     
-    Pessoa pessoaSalva = pessoaBuilder.comId(1L).construir(); 
+    Pessoa pessoaSalva = pessoaBuilder.construir(); 
     
     PessoaDto saidaDto = new PessoaDto(
-        1L, 
+        null,
         pessoaSalva.getNome(), 
         pessoaSalva.getCpf(), 
         pessoaSalva.getDataNascimento(), 
@@ -84,8 +85,7 @@ public class PessoaServiceTest {
 
     when(pessoaMapper.toEntity(entradaDto)).thenReturn(pessoaParaSalvar); 
 
-    when(repositorioPessoa.save(any(Pessoa.class))).thenReturn(pessoaSalva);
-
+    when(repositorioPessoa.save(eq(pessoaParaSalvar))).thenReturn(pessoaSalva);
     when(pessoaMapper.toDto(pessoaSalva)).thenReturn(saidaDto); 
 
     PessoaDto resultado = servicoPessoa.salvarPessoa(entradaDto); 

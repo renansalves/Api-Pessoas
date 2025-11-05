@@ -14,7 +14,6 @@ import br.tec.db.Pessoa.model.Pessoa;
 public class PessoaBuilder {
 
   private  PessoaMapperInterface pessoaMapper;
-  private Long id = 1L;
   private String nome = "Joao Pedro";
   private LocalDate dataNascimento = LocalDate.of(1994,2,1);
 	private String cpf = "012.333.444-00";
@@ -26,10 +25,6 @@ public class PessoaBuilder {
       return new PessoaBuilder();
   }
 
-  public PessoaBuilder comId(Long id) {
-      this.id = id;
-      return this;
-  }
 
   public PessoaBuilder comNome(String nome) {
       this.nome = nome;
@@ -58,7 +53,7 @@ public class PessoaBuilder {
         return this;
     }
   public Pessoa construir(){
-    return new Pessoa(id,nome,dataNascimento, cpf, enderecos);
+    return new Pessoa(nome,dataNascimento, cpf, enderecos);
   }
 
   
