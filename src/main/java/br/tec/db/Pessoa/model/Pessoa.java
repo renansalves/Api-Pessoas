@@ -26,6 +26,19 @@ public class Pessoa {
 
 	private int idade;
 
+  public Pessoa(){
+
+  }
+	public Pessoa(Long id, String nome, LocalDate dataNascimento,
+			@Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "CPF deve estar no formato xxx.xxx.xxx-xx") String cpf,
+			List<Endereco> enderecos) {
+    this.id = id;
+		this.nome = nome;
+		this.dataNascimento = dataNascimento;
+		this.cpf = cpf;
+		this.enderecos = enderecos;
+	}
+
 	private String nome;
 
 	private LocalDate dataNascimento;

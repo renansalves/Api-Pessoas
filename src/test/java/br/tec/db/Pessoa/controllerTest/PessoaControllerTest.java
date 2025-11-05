@@ -35,7 +35,6 @@ import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.service.PessoaService;
 
 @WebMvcTest(PessoaController.class)
-
 public class PessoaControllerTest {
 
   @MockBean

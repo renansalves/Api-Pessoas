@@ -85,6 +85,6 @@ public class PessoaService {
   }
   public Pessoa retornaPessoaEncontrada(Long id){
     return repositorioPessoa.findById(id)
-        .orElseThrow(() -> new NotFoundException("Pessoa não encontrada para deleção com id: " + id));
+        .orElseThrow(() -> new NotFoundException("Pessoa não encontrada com id: " + id));
   }
 }
