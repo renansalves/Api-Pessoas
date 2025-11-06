@@ -31,11 +31,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.tec.db.Pessoa.controller.PessoaController;
 import br.tec.db.Pessoa.dto.PessoaDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.service.PessoaService;
 
 @WebMvcTest(PessoaController.class)
-
 public class PessoaControllerTest {
 
   @MockBean
@@ -58,7 +58,7 @@ public class PessoaControllerTest {
   @Test
   void salvarPessoa_DeveRetornarStatus201_E_Localizacao() throws Exception {
 
-    when(servicoPessoa.salvarPessoa(any(PessoaDto.class))).thenReturn(pessoaDto);
+    when(servicoPessoa.salvarPessoa(any(PessoaRequest.class))).thenReturn(PessoaRequestDto);
 
     mockMvc.perform(post(BASE_URL + "/")
         .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +68,7 @@ public class PessoaControllerTest {
         .andExpect(header().exists("Location"))
         .andExpect(jsonPath("$.nome", is("Mock Teste")));
 
-    verify(servicoPessoa, times(1)).salvarPessoa(any(PessoaDto.class));
+    verify(servicoPessoa, times(1)).salvarPessoa(any(PessoaRequest.class));
   }
 
   @Test
@@ -78,7 +78,6 @@ public class PessoaControllerTest {
 
     mockMvc.perform(get(BASE_URL + "/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON))
-
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id", is(1)));
   }
@@ -90,7 +89,6 @@ public class PessoaControllerTest {
 
     mockMvc.perform(get(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON))
-
         .andExpect(status().isNotFound());
   }
 
@@ -100,7 +98,6 @@ public class PessoaControllerTest {
     doNothing().when(servicoPessoa).deletarPessoa(1L);
 
     mockMvc.perform(delete(BASE_URL + "/{id}", 1L))
-
         .andExpect(status().isNoContent());
 
     verify(servicoPessoa, times(1)).deletarPessoa(1L);
@@ -112,22 +109,20 @@ public class PessoaControllerTest {
     doThrow(NotFoundException.class).when(servicoPessoa).deletarPessoa(99L);
 
     mockMvc.perform(delete(BASE_URL + "/{id}", 99L))
-
         .andExpect(status().isNotFound());
   }
 
   @Test
   void atualizarPessoa_DeveRetornarStatus200_E_PessoaAtualizada() throws Exception {
 
-    PessoaDto pessoaAtualizada = new PessoaDto(1L, "Atualizado", "000.000.000-00", LocalDate.of(1990, 1, 1),
-        Arrays.asList(), null);
+    PessoaRequestDto pessoaAtualizada = new PessoaRequestDto("Atualizado", "000.000.000-00", LocalDate.of(1990, 1, 1),
+        Arrays.asList());
 
-    when(servicoPessoa.atualizarPessoa(eq(1L), any(PessoaDto.class))).thenReturn(pessoaAtualizada);
+    when(servicoPessoa.atualizarPessoa(eq(1L), any(PessoaRequestDto.class))).thenReturn(pessoaAtualizada);
 
     mockMvc.perform(put(BASE_URL + "/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(pessoaDto)))
-
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.nome", is("Atualizado")));
 
@@ -142,7 +137,6 @@ public class PessoaControllerTest {
     mockMvc.perform(put(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(pessoaDto)))
-
         .andExpect(status().isNotFound());
   }
 }

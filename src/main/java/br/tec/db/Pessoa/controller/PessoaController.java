@@ -17,6 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.tec.db.Pessoa.service.PessoaService;
 import br.tec.db.Pessoa.dto.PessoaDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +36,7 @@ public class PessoaController {
       @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos")
   })
   @PostMapping("/")
-  public ResponseEntity<PessoaDto> salvarPessoa(@RequestBody PessoaDto pessoaDto) {
+  public ResponseEntity<PessoaResponseDto> salvarPessoa(@RequestBody PessoaRequestDto pessoaDto) {
 
     PessoaDto pessoaSalva = servicoPessoa.salvarPessoa(pessoaDto);
 

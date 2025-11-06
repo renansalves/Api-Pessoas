@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import br.tec.db.Pessoa.dto.PessoaDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import br.tec.db.Pessoa.model.Pessoa;
 
 @Mapper(componentModel = "spring", uses = { EnderecoMapperInterface.class })
@@ -24,5 +26,9 @@ public interface PessoaMapperInterface {
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "idade", ignore = true) 
-  br.tec.db.Pessoa.model.Pessoa toEntity(PessoaDto pessoaDto);
+  Pessoa toEntity(PessoaDto pessoaDto);
+  Pessoa toEntity(PessoaRequestDto pessoaDto);
+
+  PessoaRequestDto requestToDto(Pessoa pessoa);
+  PessoaResponseDto responseToDto(Pessoa pessoa);
 }

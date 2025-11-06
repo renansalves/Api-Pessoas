@@ -1,20 +1,20 @@
 package br.tec.db.Pessoa.service;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.tec.db.Pessoa.dto.PessoaDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.map.EnderecoMapperInterface;
 import br.tec.db.Pessoa.map.PessoaMapperInterface;
 import br.tec.db.Pessoa.model.Endereco;
 import br.tec.db.Pessoa.model.Pessoa;
 import br.tec.db.Pessoa.repository.PessoaRepository;
+
 
 @Service
 public class PessoaService {
@@ -26,26 +26,28 @@ public class PessoaService {
   @Autowired
   private PessoaRepository repositorioPessoa;
 
-  public PessoaDto salvarPessoa(PessoaDto pessoaDto) {
+  public PessoaResponseDto salvarPessoa(PessoaRequestDto pessoaDto) {
     Pessoa pessoaEntidade = pessoaMapper.toEntity(pessoaDto);
     Pessoa entidadeSalva = repositorioPessoa.save(pessoaEntidade);
 
-    return pessoaMapper.toDto(entidadeSalva);
+    return pessoaMapper.responseToDto(entidadeSalva);
   }
 
-  public PessoaDto listarUmaPessoaPorId(Long id) {
+  public PessoaResponseDto listarUmaPessoaPorId(Long id) {
     Pessoa pessoa = retornaPessoaEncontrada(id);
 
-    return pessoaMapper.toDto(pessoa);
+    return pessoaMapper.responseToDto(pessoa);
   }
 
-  public List<PessoaDto> listarPessoas() {
-    return repositorioPessoa.findAll().stream()
-        .map(pessoaMapper::toDto)
+  public List<PessoaResponseDto> listarPessoas() {
+     List <PessoaResponseDto> response = repositorioPessoa.findAll().stream()
+        .map(pessoaMapper::responseToDto())
         .collect(Collectors.toList());
+     return response;
   }
 
-  public PessoaDto atualizarPessoa(Long id, PessoaDto pessoaDto) {
+
+  public PessoaResponseDto atualizarPessoa(Long id, PessoaRequestDto pessoaDto) {
       Pessoa entidadePessoa = retornaPessoaEncontrada(id); 
 
     if (pessoaDto.nome() != null)
@@ -66,7 +68,7 @@ public class PessoaService {
     }
 
     Pessoa entidadeAtualizada = repositorioPessoa.save(entidadePessoa);
-    return pessoaMapper.toDto(entidadeAtualizada);
+    return pessoaMapper.responseToDto(entidadeAtualizada);
   }
 
   public void deletarPessoa(Long id) {
@@ -75,14 +77,6 @@ public class PessoaService {
     repositorioPessoa.delete(pessoa);
   }
 
-  public int calculaIdadePessoa(Long id) {
-    Pessoa pessoa = retornaPessoaEncontrada(id);
-    LocalDate hoje = LocalDate.now();
-    Period idade = Period.between(pessoa.getDataNascimento(), hoje);
-
-    return idade.getYears();
-
-  }
   public Pessoa retornaPessoaEncontrada(Long id){
     return repositorioPessoa.findById(id)
         .orElseThrow(() -> new NotFoundException("Pessoa não encontrada para deleção com id: " + id));
