@@ -41,7 +41,7 @@ public class PessoaService {
 
   public List<PessoaResponseDto> listarPessoas() {
      List <PessoaResponseDto> response = repositorioPessoa.findAll().stream()
-        .map(pessoaMapper::responseToDto())
+        .map(pessoaMapper::responseToDto)
         .collect(Collectors.toList());
      return response;
   }

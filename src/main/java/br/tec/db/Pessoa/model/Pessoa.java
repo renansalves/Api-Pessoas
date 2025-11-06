@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
@@ -31,11 +30,19 @@ public class Pessoa {
 	private LocalDate dataNascimento;
 
 	@Column(nullable = false, unique = true)
-	@Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "CPF deve estar no formato xxx.xxx.xxx-xx")
 	private String cpf;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "pessoa_id")
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
+
+	public Pessoa(String nome, LocalDate dataNascimento, String cpf, List<Endereco> enderecos) {
+		this.nome = nome;
+		this.dataNascimento = dataNascimento;
+		this.cpf = cpf;
+		this.enderecos = enderecos;
+	}
+
+  
 
 }

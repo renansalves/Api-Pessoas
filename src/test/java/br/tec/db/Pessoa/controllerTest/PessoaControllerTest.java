@@ -29,9 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.tec.db.Pessoa.builder.PessoaBuilder;
 import br.tec.db.Pessoa.controller.PessoaController;
-import br.tec.db.Pessoa.dto.PessoaDto;
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.service.PessoaService;
 
@@ -47,18 +48,19 @@ public class PessoaControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private PessoaDto pessoaDto;
+  private PessoaRequestDto pessoaDto;
+  private PessoaBuilder builder;
   private final String BASE_URL = "/pessoa";
 
   @BeforeEach
   void setup() {
-    pessoaDto = new PessoaDto(1L, "Mock Teste", "000.000.000-00", LocalDate.of(1990, 1, 1), Arrays.asList(), null);
+    pessoaDto = new PessoaRequestDto( "Mock Teste", "000.000.000-00", LocalDate.of(1990, 1, 1), Arrays.asList());
   }
 
   @Test
   void salvarPessoa_DeveRetornarStatus201_E_Localizacao() throws Exception {
 
-    when(servicoPessoa.salvarPessoa(any(PessoaRequest.class))).thenReturn(PessoaRequestDto);
+    when(servicoPessoa.salvarPessoa(any(PessoaRequestDto.class))).thenReturn(any(PessoaResponseDto.class));
 
     mockMvc.perform(post(BASE_URL + "/")
         .contentType(MediaType.APPLICATION_JSON)
@@ -68,13 +70,13 @@ public class PessoaControllerTest {
         .andExpect(header().exists("Location"))
         .andExpect(jsonPath("$.nome", is("Mock Teste")));
 
-    verify(servicoPessoa, times(1)).salvarPessoa(any(PessoaRequest.class));
+    verify(servicoPessoa, times(1)).salvarPessoa(any(PessoaRequestDto.class));
   }
 
   @Test
   void listarUmaPessoaPorId_DeveRetornarStatus200_E_Pessoa() throws Exception {
 
-    when(servicoPessoa.listarUmaPessoaPorId(1L)).thenReturn(pessoaDto);
+    when(servicoPessoa.listarUmaPessoaPorId(1L)).thenReturn(any(PessoaResponseDto.class));
 
     mockMvc.perform(get(BASE_URL + "/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON))
@@ -118,7 +120,7 @@ public class PessoaControllerTest {
     PessoaRequestDto pessoaAtualizada = new PessoaRequestDto("Atualizado", "000.000.000-00", LocalDate.of(1990, 1, 1),
         Arrays.asList());
 
-    when(servicoPessoa.atualizarPessoa(eq(1L), any(PessoaRequestDto.class))).thenReturn(pessoaAtualizada);
+    when(servicoPessoa.atualizarPessoa(eq(1L), any(PessoaRequestDto.class))).thenReturn(any(PessoaResponseDto.class));
 
     mockMvc.perform(put(BASE_URL + "/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON)
@@ -126,13 +128,13 @@ public class PessoaControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.nome", is("Atualizado")));
 
-    verify(servicoPessoa, times(1)).atualizarPessoa(eq(1L), any(PessoaDto.class));
+    verify(servicoPessoa, times(1)).atualizarPessoa(eq(1L), any(PessoaRequestDto.class));
   }
 
   @Test
   void atualizarPessoa_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
 
-    when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaDto.class))).thenThrow(NotFoundException.class);
+    when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaRequestDto.class))).thenThrow(NotFoundException.class);
 
     mockMvc.perform(put(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON)
