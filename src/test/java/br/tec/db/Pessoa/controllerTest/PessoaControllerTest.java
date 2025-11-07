@@ -48,19 +48,17 @@ public class PessoaControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
-  @MockBean
+  @Autowired
   private ObjectMapper objectMapper;
 
   private final String BASE_URL = "/pessoa";
 
-  @Autowired
-  private PessoaBuilder pessoaBuilder;
 
   @Test
   void deveCriarPessoal_E_DeveRetornarStatus201_E_Localizacao() throws Exception {
 
-    PessoaRequestDto requestDto =  pessoaBuilder.criarPessoaRequestDto();
-    PessoaResponseDto responseDto = pessoaBuilder.criarPessoaResponseDto();
+    PessoaRequestDto requestDto =  PessoaBuilder.umUsuario().criarPessoaRequestDto();
+    PessoaResponseDto responseDto = PessoaBuilder.umUsuario().criarPessoaResponseDto();
 
     when(servicoPessoa.salvarPessoa(eq(requestDto))).thenReturn(responseDto);
 
@@ -70,7 +68,7 @@ public class PessoaControllerTest {
 
         .andExpect(status().isCreated())
         .andExpect(header().exists("Location"))
-        .andExpect(jsonPath("$.nome", is("Renan Alces")));
+        .andExpect(jsonPath("$.nome", is("Joao Pedro")));
 
     verify(servicoPessoa, times(1)).salvarPessoa(eq(requestDto));
   }
@@ -79,14 +77,15 @@ public class PessoaControllerTest {
 
   @Test
   void listarUmaPessoaPorId_DeveRetornarStatus200_E_Pessoa() throws Exception {
-      PessoaResponseDto responseDto = pessoaBuilder.criarPessoaResponseDto();
+      PessoaResponseDto responseDto = PessoaBuilder.umUsuario().criarPessoaResponseDto();
 
       when(servicoPessoa.listarUmaPessoaPorId(anyLong())).thenReturn(responseDto);
 
-      mockMvc.perform(get("/pessoas/{id}", 1L)
-              .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$.nome").value("Renan"));
+  
+    mockMvc.perform(get(BASE_URL +"/{id}", 1L)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.nome").value("Joao Pedro"));
   }
 
   @Test
@@ -119,22 +118,22 @@ public class PessoaControllerTest {
         .andExpect(status().isNotFound());
   }
 
-  @Test
-  void atualizarPessoa_DeveRetornarStatus200_E_PessoaAtualizada() throws Exception {
 
-    PessoaRequestDto pessoaAtualizada = new PessoaRequestDto("Atualizado", "000.000.000-00", LocalDate.of(1990, 1, 1),
-        Arrays.asList());
+@Test
+void atualizarPessoa_DeveRetornarStatus200_E_PessoaAtualizada() throws Exception {
+    PessoaRequestDto pessoaAtualizada = new PessoaRequestDto("Atualizado", "000.000.000-00", LocalDate.of(1990, 1, 1), Arrays.asList());
+    PessoaResponseDto responseDto = new PessoaResponseDto(1L, "Atualizado", "000.000.000-00", 33, LocalDate.of(1990, 1, 1), Arrays.asList());
 
-//    when(servicoPessoa.atualizarPessoa(eq(1L), any(PessoaRequestDto.class))).thenReturn(any(PessoaResponseDto.class));
+    when(servicoPessoa.atualizarPessoa(eq(1L), any(PessoaRequestDto.class))).thenReturn(responseDto);
 
-//    mockMvc.perform(put(BASE_URL + "/{id}", 1L)
-//        .contentType(MediaType.APPLICATION_JSON)
-//        .content(objectMapper.writeValueAsString(pessoaDto)))
-//        .andExpect(status().isOk())
-//        .andExpect(jsonPath("$.nome", is("Atualizado")));
+    mockMvc.perform(put(BASE_URL + "/{id}", 1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(pessoaAtualizada)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.nome", is("Atualizado")));
 
-//    verify(servicoPessoa, times(1)).atualizarPessoa(eq(1L), any(PessoaRequestDto.class));
-  }
+    verify(servicoPessoa, times(1)).atualizarPessoa(eq(1L), any(PessoaRequestDto.class));
+}
 
   @Test
   void atualizarPessoa_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {

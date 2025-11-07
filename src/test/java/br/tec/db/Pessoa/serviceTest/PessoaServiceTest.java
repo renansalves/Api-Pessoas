@@ -86,12 +86,12 @@ public class PessoaServiceTest {
     Pessoa pessoa = pessoaBuilder.criarPessoa();
 
     when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoa));
-    when(pessoaMapper.requestToDto(pessoa)).thenReturn(pessoaRequest);
+    when(pessoaMapper.responseToDto(pessoa)).thenReturn(pessoaResponse);
 
     PessoaResponseDto resultado = servicoPessoa.listarUmaPessoaPorId(1L);
 
     assertNotNull(resultado);
-    assertEquals("Renan Alves", resultado.nome());
+    assertEquals("Joao Pedro", resultado.nome());
     verify(repositorioPessoa, times(1)).findById(1L);
   }
 
