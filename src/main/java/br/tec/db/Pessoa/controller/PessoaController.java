@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.tec.db.Pessoa.service.PessoaService;
-import br.tec.db.Pessoa.dto.PessoaDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,9 +35,9 @@ public class PessoaController {
       @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos")
   })
   @PostMapping("/")
-  public ResponseEntity<PessoaDto> salvarPessoa(@RequestBody PessoaDto pessoaDto) {
+  public ResponseEntity<PessoaResponseDto> salvarPessoa(@RequestBody PessoaRequestDto pessoaDto) {
 
-    PessoaDto pessoaSalva = servicoPessoa.salvarPessoa(pessoaDto);
+    PessoaResponseDto pessoaSalva = servicoPessoa.salvarPessoa(pessoaDto);
 
     URI recurso = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("{id}")
@@ -50,8 +51,8 @@ public class PessoaController {
       @ApiResponse(responseCode = "200", description = "Retorna a lista de pessoas que estão cadastradas na base"),
   })
   @GetMapping("/")
-  public ResponseEntity<List<PessoaDto>> listarPessoas() {
-    List<PessoaDto> pessoas = servicoPessoa.listarPessoas();
+  public ResponseEntity<List<PessoaResponseDto>> listarPessoas() {
+    List<PessoaResponseDto> pessoas = servicoPessoa.listarPessoas();
     return ResponseEntity.ok(pessoas);
   }
 
@@ -60,8 +61,8 @@ public class PessoaController {
       @ApiResponse(responseCode = "404", description = "Pessoa não foi encontrada")
   })
   @GetMapping("{id}")
-  public ResponseEntity<PessoaDto> BuscarPessoa(@PathVariable("id") Long id) {
-    PessoaDto pessoaDto = servicoPessoa.listarUmaPessoaPorId(id);
+  public ResponseEntity<PessoaResponseDto> BuscarPessoa(@PathVariable("id") Long id) {
+    PessoaResponseDto pessoaDto = servicoPessoa.listarUmaPessoaPorId(id);
     return ResponseEntity.ok(pessoaDto);
   }
 
@@ -70,8 +71,8 @@ public class PessoaController {
       @ApiResponse(responseCode = "404", description = "Pessoa não encontrada")
   })
   @PutMapping("{id}")
-  public ResponseEntity<PessoaDto> atualizarPessoa(@PathVariable("id") Long id, @RequestBody PessoaDto pessoaDto) {
-    PessoaDto pessoaAtualizada = servicoPessoa.atualizarPessoa(id, pessoaDto);
+  public ResponseEntity<PessoaResponseDto> atualizarPessoa(@PathVariable("id") Long id, @RequestBody PessoaRequestDto pessoaDto) {
+    PessoaResponseDto pessoaAtualizada = servicoPessoa.atualizarPessoa(id, pessoaDto);
 
     return ResponseEntity.ok(pessoaAtualizada);
   }

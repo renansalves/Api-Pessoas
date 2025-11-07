@@ -1,12 +1,18 @@
 package br.tec.db.Pessoa.serviceTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +22,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.tec.db.Pessoa.builder.PessoaBuilder;
 import br.tec.db.Pessoa.dto.EnderecoDto;
-import br.tec.db.Pessoa.dto.PessoaDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.map.EnderecoMapperInterface;
 import br.tec.db.Pessoa.map.PessoaMapperInterface;
@@ -26,7 +34,6 @@ import br.tec.db.Pessoa.repository.PessoaRepository;
 import br.tec.db.Pessoa.service.PessoaService;
 
 @ExtendWith(MockitoExtension.class)
-
 public class PessoaServiceTest {
 
   @InjectMocks
@@ -39,50 +46,52 @@ public class PessoaServiceTest {
   @Mock
   private EnderecoMapperInterface enderecoMapper;
 
-  private Pessoa pessoaEntidade;
-  private PessoaDto pessoaDto;
-  private EnderecoDto enderecoDto;
+  private PessoaBuilder pessoaBuilder;
+
+  private Pessoa pessoaEntity;
+  PessoaResponseDto pessoaResponse;
+  PessoaRequestDto pessoaRequest;
 
   @BeforeEach
   void setup() {
-    enderecoDto = new EnderecoDto("Rua Teste", 100, "Bairro Teste", "Cidade Teste", "SP", "00000000");
-
-    pessoaEntidade = new Pessoa();
-    pessoaEntidade.setId(1L);
-    pessoaEntidade.setNome("Teste Unitario");
-    pessoaEntidade.setCpf("123.456.789-00");
-    pessoaEntidade.setDataNascimento(LocalDate.of(1990, 1, 1));
-
-    pessoaDto = new PessoaDto(1L, "Teste Unitario", "123.456.789-00", LocalDate.of(1990, 1, 1),
-        Arrays.asList(enderecoDto), null);
+  pessoaBuilder = new PessoaBuilder();
+    
+    this.pessoaEntity = pessoaBuilder.criarPessoa(); 
+    this.pessoaRequest = pessoaBuilder.criarPessoaRequestDto();
+    this.pessoaResponse = pessoaBuilder.criarPessoaResponseDto();
   }
 
   @Test
-  void salvarPessoa_DeveRetornarPessoaSalva() {
+  void deveCriarUmaPessoaComSucesso() {
+    
 
-    when(pessoaMapper.toEntity(any(PessoaDto.class))).thenReturn(pessoaEntidade);
-    when(repositorioPessoa.save(any(Pessoa.class))).thenReturn(pessoaEntidade);
-    when(pessoaMapper.toDto(any(Pessoa.class))).thenReturn(pessoaDto);
+    when(pessoaMapper.toEntity(pessoaRequest)).thenReturn(pessoaEntity); 
+    when(repositorioPessoa.save(any(Pessoa.class))).thenReturn(pessoaEntity);
+    when(pessoaMapper.responseToDto(pessoaEntity)).thenReturn(pessoaBuilder.criarPessoaResponseDto()); 
 
-    PessoaDto resultado = servicoPessoa.salvarPessoa(pessoaDto);
+    PessoaResponseDto resultado = servicoPessoa.salvarPessoa(
+        pessoaRequest
+        ); 
 
     assertNotNull(resultado);
-    assertEquals(1L, resultado.id());
-    verify(repositorioPessoa, times(1)).save(pessoaEntidade);
-    verify(pessoaMapper, times(1)).toEntity(pessoaDto);
-    verify(pessoaMapper, times(1)).toDto(pessoaEntidade);
-  }
+    
+    verify(pessoaMapper, times(1)).toEntity(pessoaRequest);
+    verify(repositorioPessoa, times(1)).save(pessoaEntity); 
+    verify(pessoaMapper, times(1)).responseToDto(pessoaEntity);
+}
 
   @Test
   void listarUmaPessoaPorId_DeveRetornarPessoaExistente() {
 
-    when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoaEntidade));
-    when(pessoaMapper.toDto(any(Pessoa.class))).thenReturn(pessoaDto);
+    Pessoa pessoa = pessoaBuilder.criarPessoa();
 
-    PessoaDto resultado = servicoPessoa.listarUmaPessoaPorId(1L);
+    when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoa));
+    when(pessoaMapper.requestToDto(pessoa)).thenReturn(pessoaRequest);
+
+    PessoaResponseDto resultado = servicoPessoa.listarUmaPessoaPorId(1L);
 
     assertNotNull(resultado);
-    assertEquals("Teste Unitario", resultado.nome());
+    assertEquals("Renan Alves", resultado.nome());
     verify(repositorioPessoa, times(1)).findById(1L);
   }
 
@@ -98,12 +107,14 @@ public class PessoaServiceTest {
   @Test
   void deletarPessoa_DeveDeletarPessoaExistente() {
 
-    when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoaEntidade));
+    Pessoa pessoa = pessoaBuilder.criarPessoa();
+
+    when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoa));
     doNothing().when(repositorioPessoa).delete(any(Pessoa.class));
 
     assertDoesNotThrow(() -> servicoPessoa.deletarPessoa(1L));
 
     verify(repositorioPessoa, times(1)).findById(1L);
-    verify(repositorioPessoa, times(1)).delete(pessoaEntidade);
+    verify(repositorioPessoa, times(1)).delete(pessoa);
   }
 }
