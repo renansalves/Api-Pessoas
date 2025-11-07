@@ -48,7 +48,6 @@ public class PessoaServiceTest {
 
   private PessoaBuilder pessoaBuilder;
 
-  private EnderecoDto enderecoDto;
   private Pessoa pessoaEntity;
   PessoaResponseDto pessoaResponse;
   PessoaRequestDto pessoaRequest;
@@ -57,50 +56,34 @@ public class PessoaServiceTest {
   void setup() {
   pessoaBuilder = new PessoaBuilder();
     
-    this.pessoaEntity = pessoaBuilder.construir(); 
-    this.pessoaRequest = new PessoaRequestDto(
-        "Renan Alves", 
-        "019.533.650-00",
-        LocalDate.of(1989,06,03),
-        null
-    ); 
+    this.pessoaEntity = pessoaBuilder.criarPessoa(); 
+    this.pessoaRequest = pessoaBuilder.criarPessoaRequestDto();
+    this.pessoaResponse = pessoaBuilder.criarPessoaResponseDto();
   }
 
   @Test
-  void salvarPessoa_DeveRetornarPessoaSalva() {
-    PessoaRequestDto entradaDto = this.pessoaRequest; 
-
-    Pessoa pessoaParaSalvar = pessoaBuilder.construir(); 
-    
-    Pessoa pessoaSalva = pessoaBuilder.construir(); 
-    
-    PessoaRequestDto saidaDto = new PessoaRequestDto(
-        pessoaSalva.getNome(), 
-        pessoaSalva.getCpf(), 
-        pessoaSalva.getDataNascimento(), 
-        null
-    );
+  void deveCriarUmaPessoaComSucesso() {
     
 
-    when(pessoaMapper.toEntity(entradaDto)).thenReturn(pessoaParaSalvar); 
+    when(pessoaMapper.toEntity(pessoaRequest)).thenReturn(pessoaEntity); 
+    when(repositorioPessoa.save(any(Pessoa.class))).thenReturn(pessoaEntity);
+    when(pessoaMapper.responseToDto(pessoaEntity)).thenReturn(pessoaBuilder.criarPessoaResponseDto()); 
 
-    when(repositorioPessoa.save(eq(pessoaParaSalvar))).thenReturn(pessoaSalva);
-    when(pessoaMapper.requestToDto(pessoaSalva)).thenReturn(saidaDto); 
-
-    PessoaResponseDto resultado = servicoPessoa.salvarPessoa(entradaDto); 
+    PessoaResponseDto resultado = servicoPessoa.salvarPessoa(
+        pessoaRequest
+        ); 
 
     assertNotNull(resultado);
-//    assertEquals(saidaDto.id(), resultado.id());
     
-    verify(pessoaMapper, times(1)).toEntity(entradaDto);
-    verify(repositorioPessoa, times(1)).save(pessoaParaSalvar); 
-    verify(pessoaMapper, times(1)).requestToDto(pessoaSalva);
+    verify(pessoaMapper, times(1)).toEntity(pessoaRequest);
+    verify(repositorioPessoa, times(1)).save(pessoaEntity); 
+    verify(pessoaMapper, times(1)).responseToDto(pessoaEntity);
 }
 
   @Test
   void listarUmaPessoaPorId_DeveRetornarPessoaExistente() {
 
-    Pessoa pessoa = pessoaBuilder.construir();
+    Pessoa pessoa = pessoaBuilder.criarPessoa();
 
     when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoa));
     when(pessoaMapper.requestToDto(pessoa)).thenReturn(pessoaRequest);
@@ -124,7 +107,7 @@ public class PessoaServiceTest {
   @Test
   void deletarPessoa_DeveDeletarPessoaExistente() {
 
-    Pessoa pessoa = pessoaBuilder.construir();
+    Pessoa pessoa = pessoaBuilder.criarPessoa();
 
     when(repositorioPessoa.findById(1L)).thenReturn(Optional.of(pessoa));
     doNothing().when(repositorioPessoa).delete(any(Pessoa.class));

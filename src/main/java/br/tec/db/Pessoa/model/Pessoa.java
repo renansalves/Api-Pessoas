@@ -36,7 +36,7 @@ public class Pessoa {
 	@JoinColumn(name = "pessoa_id")
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 
-	public Pessoa(String nome, LocalDate dataNascimento, String cpf, List<Endereco> enderecos) {
+	public Pessoa(String nome, LocalDate dataNascimento, String cpf, List<Endereco> enderecos ) {
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.cpf = cpf;

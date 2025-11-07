@@ -1,55 +1,66 @@
 package br.tec.db.Pessoa.builder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
+import br.tec.db.Pessoa.dto.EnderecoDto;
+import br.tec.db.Pessoa.dto.PessoaRequestDto;
+import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import br.tec.db.Pessoa.model.Endereco;
 import br.tec.db.Pessoa.model.Pessoa;
 
 public class PessoaBuilder {
 
-  private String nome = "Joao Pedro";
-  private LocalDate dataNascimento = LocalDate.of(1994,2,1);
-	private String cpf = "012.333.444-00";
+  private final Long id = 1L;
+  private final String nome = "Joao Pedro";
+  private final LocalDate dataNascimento = LocalDate.of(1994,2,1);
+	private final String cpf = "012.333.444-00";
+  private final int idade = 31;
 
-  private List<Endereco> enderecos = List.of(
-        new Endereco(1L, "Zero Hora", 2020, "Algarve", "Alvorada", "Rio Grande Do Sul", "94858-00")
+  private final List<Endereco> enderecos = List.of(
+        new Endereco(1L, "Zero Hora", 2020, "Algarve", "Alvorada", "Rio Grande Do Sul", "94858-000"),
+        new Endereco(2L, "Getuli vargas", 1000, "Bela Vista", "Alvorada", "Rio Grande Do Sul", "94820-000"),
+        new Endereco(3L, "PP5", 20, "Nova Americana", "Alvorada", "Rio Grande Do Sul", "94820-594")
+    );
+  private final List<EnderecoDto> enderecosDto = List.of(
+        new EnderecoDto("Zero Hora", 2020, "Algarve", "Alvorada", "Rio Grande Do Sul", "94858-000"),
+        new EnderecoDto("Getuli vargas", 1000, "Bela Vista", "Alvorada", "Rio Grande Do Sul", "94820-000"),
+        new EnderecoDto("PP5", 20, "Nova Americana", "Alvorada", "Rio Grande Do Sul", "94820-594")
     );
   public static PessoaBuilder umUsuario() {
       return new PessoaBuilder();
   }
 
-
-  public PessoaBuilder comNome(String nome) {
-      this.nome = nome;
-      return this;
+  public  Pessoa criarPessoa() {
+        Pessoa pessoa = new Pessoa(
+          this.nome,
+          this.dataNascimento,
+          this.cpf,
+          this.enderecos
+          );
+      return pessoa;
   }
 
-  public PessoaBuilder comCpf(String cpf) {
-      this.cpf = cpf;
-      return this;
-  }
+  public PessoaRequestDto criarPessoaRequestDto() {
+    PessoaRequestDto dto = new PessoaRequestDto(
+        this.nome,
+        this.cpf,
+        this.dataNascimento,
+        this.enderecosDto
+    ); 
+        return dto;
+    }
 
-  public PessoaBuilder comDataNascimento(LocalDate dataNascimento) {
-      this.dataNascimento = dataNascimento;
-      return this;
-  }
+  public PessoaResponseDto criarPessoaResponseDto() {
+      PessoaResponseDto dto = new PessoaResponseDto(
+      this.id,
+      this.nome,
+      this.cpf,
+      this.idade,
+      this.dataNascimento,
+      this.enderecosDto
+      );
+      return dto;
     
-  public PessoaBuilder comEnderecos(List<Endereco> enderecos) {
-        this.enderecos = enderecos;
-        return this;
-    }
-
-  public PessoaBuilder comEnderecoAdicional(Endereco novoEndereco) {
-        List<Endereco> novaLista = new ArrayList<>(this.enderecos);
-        novaLista.add(novoEndereco);
-        this.enderecos = novaLista;
-        return this;
-    }
-  public Pessoa construir(){
-    return new Pessoa(nome,dataNascimento, cpf, enderecos);
   }
-
-  
 }
