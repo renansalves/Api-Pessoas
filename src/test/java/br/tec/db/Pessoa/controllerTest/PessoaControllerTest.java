@@ -138,11 +138,13 @@ void atualizarPessoa_DeveRetornarStatus200_E_PessoaAtualizada() throws Exception
   @Test
   void atualizarPessoa_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
 
+    PessoaRequestDto pessoaNaoEncontrada = new PessoaRequestDto("Pessoa", "000.000.000-00", LocalDate.of(1990, 1, 1), Arrays.asList());
+
     when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaRequestDto.class))).thenThrow(NotFoundException.class);
 
-//    mockMvc.perform(put(BASE_URL + "/{id}", 99L)
-//        .contentType(MediaType.APPLICATION_JSON)
-//        .content(objectMapper.writeValueAsString(pessoaDto)))
-//        .andExpect(status().isNotFound());
+    mockMvc.perform(put(BASE_URL + "/{id}", 99L)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(pessoaNaoEncontrada)))
+        .andExpect(status().isNotFound());
   }
 }
