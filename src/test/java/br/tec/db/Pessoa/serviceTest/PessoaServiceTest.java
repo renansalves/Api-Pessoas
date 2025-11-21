@@ -6,13 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.tec.db.Pessoa.builder.PessoaBuilder;
-import br.tec.db.Pessoa.dto.EnderecoDto;
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import br.tec.db.Pessoa.handler.NotFoundException;
