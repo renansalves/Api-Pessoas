@@ -16,18 +16,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Pessoa {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-
-  @NotNull
-	private int idade;
+	private Long id;
 
   @NotBlank
 	private String nome;
@@ -42,13 +46,31 @@ public class Pessoa {
 	@JoinColumn(name = "pessoa_id")
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 
-	public Pessoa(String nome, LocalDate dataNascimento, String cpf, List<Endereco> enderecos ) {
-		this.nome = nome;
-		this.dataNascimento = dataNascimento;
-		this.cpf = cpf;
-		this.enderecos = enderecos;
-	}
+  public void validarEDefinirEnderecoPrincipal(){
 
+    long principaisCount = this.enderecos.stream()
+        .filter(Endereco::isPrincipal)
+        .count();
+
+    if (principaisCount == 0 && !this.enderecos.isEmpty()) {
+        // Se não houver nenhum, define o primeiro como principal
+        this.enderecos.get(0).setPrincipal(true);
+        return;
+    }
+    
+    if (principaisCount > 1) {
+        boolean firstFound = false;
+        for (Endereco endereco : this.enderecos) {
+            if (endereco.isPrincipal) {
+                if (!firstFound) {
+                    firstFound = true; // Mantém este como principal
+                } else {
+                    endereco.setPrincipal(false); // Desmarca os restantes
+                }
+            }
+        }
+    }
+  }
   
 
 }

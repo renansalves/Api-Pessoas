@@ -15,12 +15,11 @@ public class PessoaBuilder {
   private final String nome = "Joao Pedro";
   private final LocalDate dataNascimento = LocalDate.of(1994,2,1);
 	private final String cpf = "012.333.444-00";
-  private final int idade = 31;
 
   private final List<Endereco> enderecos = List.of(
-        new Endereco(1L, "Zero Hora", 2020, "Algarve", "Alvorada", "Rio Grande Do Sul", "94858-000"),
-        new Endereco(2L, "Getuli vargas", 1000, "Bela Vista", "Alvorada", "Rio Grande Do Sul", "94820-000"),
-        new Endereco(3L, "PP5", 20, "Nova Americana", "Alvorada", "Rio Grande Do Sul", "94820-594")
+        new Endereco(1L, "Zero Hora", 2020, "Algarve", "Alvorada", "Rio Grande Do Sul", "94858-000",false,null),
+        new Endereco(2L, "Getuli vargas", 1000, "Bela Vista", "Alvorada", "Rio Grande Do Sul", "94820-000",false,null),
+        new Endereco(3L, "PP5", 20, "Nova Americana", "Alvorada", "Rio Grande Do Sul", "94820-594",false,null)
     );
   private final List<EnderecoDto> enderecosDto = List.of(
         new EnderecoDto("Zero Hora", 2020, "Algarve", "Alvorada", "Rio Grande Do Sul", "94858-000"),
@@ -32,12 +31,7 @@ public class PessoaBuilder {
   }
 
   public  Pessoa criarPessoa() {
-        Pessoa pessoa = new Pessoa(
-          this.nome,
-          this.dataNascimento,
-          this.cpf,
-          this.enderecos
-          );
+    Pessoa pessoa = new Pessoa(1L,this.nome, this.dataNascimento, this.cpf, this.enderecos);
       return pessoa;
   }
 
@@ -52,14 +46,16 @@ public class PessoaBuilder {
     }
 
   public PessoaResponseDto criarPessoaResponseDto() {
-      PessoaResponseDto dto = new PessoaResponseDto(
-      this.id,
-      this.nome,
-      this.cpf,
-      this.idade,
-      this.dataNascimento,
-      this.enderecosDto
-      );
+
+    PessoaResponseDto dto = new PessoaResponseDto(
+        this.id,
+        this.nome,
+        this.cpf,
+        0,
+        this.dataNascimento,
+        this.enderecosDto
+        );
+
       return dto;
     
   }

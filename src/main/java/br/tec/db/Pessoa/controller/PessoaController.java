@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import br.tec.db.Pessoa.service.PessoaService;
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -30,9 +34,18 @@ public class PessoaController {
   @Autowired
   private PessoaService servicoPessoa;
 
-  @Operation(summary = "Cria uma nova Pessoa", description = "Salva uma nova Pessoa, incluindo seus Endereços.", responses = {
-      @ApiResponse(responseCode = "201", description = "Pessoa criada com sucesso"),
-      @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos")
+  @Operation(
+  summary = "Cria uma nova Pessoa", 
+  description = "Salva uma nova Pessoa, incluindo seus Endereços. Requer exatamente um ednereço principal.", 
+  responses = {
+      @ApiResponse(
+      responseCode = "201",
+      description = "Pessoa criada com sucesso",
+      content = @Content(schema = @Schema(implementation = PessoaResponseDto.class))
+      ),
+      @ApiResponse(
+      responseCode = "400", 
+      description = "Dados de entrada inválidos (DTO ou regra de negócio, ex: CPF duplicado ou múltiplos endereços principais" )
   })
   @PostMapping("/")
   public ResponseEntity<PessoaResponseDto> salvarPessoa(@RequestBody PessoaRequestDto pessoaDto) {
@@ -47,18 +60,33 @@ public class PessoaController {
     return ResponseEntity.created(recurso).body(pessoaSalva);
   }
 
-  @Operation(summary = "Lista todas as pessoas", description = "Lista todas as pessoas cadastradas", responses = {
-      @ApiResponse(responseCode = "200", description = "Retorna a lista de pessoas que estão cadastradas na base"),
+  @Operation(
+  summary = "Lista todas as pessoas",
+  description = "Lista todas as pessoas cadastradas",
+  responses = {
+      @ApiResponse(
+      responseCode = "200",
+      description = "Retorna a lista de pessoas que estão cadastradas na base"
+      ),
   })
   @GetMapping("/")
-  public ResponseEntity<List<PessoaResponseDto>> listarPessoas() {
-    List<PessoaResponseDto> pessoas = servicoPessoa.listarPessoas();
+  public ResponseEntity<Page<PessoaResponseDto>> listarPessoas(Pageable pageable) {
+    Page<PessoaResponseDto> pessoas = servicoPessoa.listarPessoas(pageable);
     return ResponseEntity.ok(pessoas);
   }
 
-  @Operation(summary = "Busca uma pessoa pelo Id", description = "Lista uma pessoa por Id cadastrado", responses = {
-      @ApiResponse(responseCode = "201", description = "Pessoa encontrada"),
-      @ApiResponse(responseCode = "404", description = "Pessoa não foi encontrada")
+  @Operation(
+  summary = "Busca uma pessoa pelo Id",
+  description = "Retorna uma pessoa cadastra na base através do seu ID.",
+  responses = {
+      @ApiResponse(
+      responseCode = "200",
+      description = "Pessoa encontrada",
+      content = @Content(schema = @Schema(implementation = PessoaResponseDto.class))
+      ),
+      @ApiResponse(responseCode = "404",
+      description = "Pessoa não foi encontrada"
+      )
   })
   @GetMapping("{id}")
   public ResponseEntity<PessoaResponseDto> BuscarPessoa(@PathVariable("id") Long id) {
@@ -66,9 +94,23 @@ public class PessoaController {
     return ResponseEntity.ok(pessoaDto);
   }
 
-  @Operation(summary = "Atualiza uma pessoa", description = "Atualiza uma pessoa que existe na base de dados", responses = {
-      @ApiResponse(responseCode = "200", description = "Pessoa encotrada na base"),
-      @ApiResponse(responseCode = "404", description = "Pessoa não encontrada")
+  @Operation(
+  summary = "Atualiza uma pessoa", 
+  description = "Atualiza uma pessoa que existe na base de dados",
+  responses = {
+      @ApiResponse(
+      responseCode = "200",
+      description = "Pessoa encotrada na base",
+      content = @Content(schema = @Schema(implementation = PessoaResponseDto.class))
+      ),
+      @ApiResponse(
+      responseCode = "404",
+      description = "Pessoa não encontrada"
+      ),
+      @ApiResponse(
+      responseCode = "400",
+      description = "Dados de entrada inválidos (validação)."
+      )
   })
   @PutMapping("{id}")
   public ResponseEntity<PessoaResponseDto> atualizarPessoa(@PathVariable("id") Long id, @RequestBody PessoaRequestDto pessoaDto) {
@@ -77,9 +119,18 @@ public class PessoaController {
     return ResponseEntity.ok(pessoaAtualizada);
   }
 
-  @Operation(summary = "Remove uma pessoa da base", description = "Remove a pessoa da base de dados pelo id informado", responses = {
-      @ApiResponse(responseCode = "201", description = "Pessoa excluida com sucesso"),
-      @ApiResponse(responseCode = "404", description = "Pessoa não encontrada para exclusão")
+  @Operation(
+  summary = "Remove uma pessoa da base",
+  description = "Remove a pessoa da base de dados pelo id informado, incluindo todos os seus endereços.",
+  responses = {
+      @ApiResponse(
+      responseCode = "204",
+      description = "Pessoa excluida com sucesso"
+      ),
+      @ApiResponse(
+      responseCode = "404",
+      description = "Pessoa não encontrada para exclusão"
+      )
   })
   @DeleteMapping("{id}")
   public ResponseEntity<Void> deletarPessoa(@PathVariable("id") Long id) {

@@ -3,6 +3,7 @@ package br.tec.db.Pessoa.handler;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ErrorHandler {
 
-  @ExceptionHandler(NotFoundException.class)
-  public ResponseEntity<ApiError> handleNotFoudException(NotFoundException ex){
 
+  @ExceptionHandler(EmptyResultDataAccessException.class)
+  public ResponseEntity<ApiError> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex){
     ApiError error = new ApiError(
         "Pessoa não encontrada.",
         HttpStatus.NOT_FOUND.value(),

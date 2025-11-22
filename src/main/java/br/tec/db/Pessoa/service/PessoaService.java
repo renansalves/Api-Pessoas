@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
-import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.map.EnderecoMapperInterface;
 import br.tec.db.Pessoa.map.PessoaMapperInterface;
 import br.tec.db.Pessoa.model.Endereco;
@@ -28,6 +30,7 @@ public class PessoaService {
 
   public PessoaResponseDto salvarPessoa(PessoaRequestDto pessoaDto) {
     Pessoa pessoaEntidade = pessoaMapper.toEntity(pessoaDto);
+    pessoaEntidade.validarEDefinirEnderecoPrincipal();
     Pessoa entidadeSalva = repositorioPessoa.save(pessoaEntidade);
 
     return pessoaMapper.responseToDto(entidadeSalva);
@@ -39,11 +42,11 @@ public class PessoaService {
     return pessoaMapper.responseToDto(pessoa);
   }
 
-  public List<PessoaResponseDto> listarPessoas() {
-     List <PessoaResponseDto> response = repositorioPessoa.findAll().stream()
-        .map(pessoaMapper::responseToDto)
-        .collect(Collectors.toList());
-     return response;
+  public Page<PessoaResponseDto> listarPessoas(Pageable pageable) {
+
+    Page<Pessoa> pessoasPage= repositorioPessoa.findAll(pageable);
+
+    return pessoasPage.map(pessoaMapper::responseToDto);
   }
 
 

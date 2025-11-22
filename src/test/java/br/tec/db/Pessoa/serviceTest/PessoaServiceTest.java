@@ -19,11 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 import br.tec.db.Pessoa.builder.PessoaBuilder;
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
-import br.tec.db.Pessoa.handler.NotFoundException;
 import br.tec.db.Pessoa.map.EnderecoMapperInterface;
 import br.tec.db.Pessoa.map.PessoaMapperInterface;
 import br.tec.db.Pessoa.model.Pessoa;
