@@ -1,189 +1,184 @@
-[
 {
-  "nome": "Pessoa A",
-  "cpf": "999.999.999-00",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+  "Pessoas": [
     {
-      "rua": "Rua A",
-      "numero": 10,
-      "bairro": "Bairro A",
-      "cidade": "Cidade A",
-      "estado": "Estado A",
-      "cep": "99999-99"
-    }
-  ]
-},
-{
-  "nome": "Pessoa B",
-  "cpf": "999.999.999-01",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa A",
+      "cpf": "999.999.999-00",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua A",
+          "numero": 10,
+          "bairro": "Bairro A",
+          "cidade": "Cidade A",
+          "estado": "Estado A",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua B",
-      "numero": 11,
-      "bairro": "Bairro B",
-      "cidade": "Cidade B",
-      "estado": "Estado B",
-      "cep": "99999-99"
-    }
-  ]
-},
-{
-  "nome": "Pessoa C",
-  "cpf": "999.999.999-02",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa B",
+      "cpf": "999.999.999-01",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua B",
+          "numero": 11,
+          "bairro": "Bairro B",
+          "cidade": "Cidade B",
+          "estado": "Estado B",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua C",
-      "numero": 12,
-      "bairro": "Bairro C",
-      "cidade": "Cidade C",
-      "estado": "Estado C",
-      "cep": "99999-99"
-    }
-  ]
-},
-{
-  "nome": "Pessoa D",
-  "cpf": "999.999.999-03",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa C",
+      "cpf": "999.999.999-02",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua C",
+          "numero": 12,
+          "bairro": "Bairro C",
+          "cidade": "Cidade C",
+          "estado": "Estado C",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua D",
-      "numero": 13,
-      "bairro": "Bairro D",
-      "cidade": "Cidade D",
-      "estado": "Estado D",
-      "cep": "99999-99"
-    }
-  ]
-},
-
-{
-  "nome": "Pessoa E",
-  "cpf": "703.375.903-04",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa D",
+      "cpf": "999.999.999-03",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua D",
+          "numero": 13,
+          "bairro": "Bairro D",
+          "cidade": "Cidade D",
+          "estado": "Estado D",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua E",
-      "numero": 14,
-      "bairro": "Bairro E",
-      "cidade": "Cidade E",
-      "estado": "Estado E",
-      "cep": "99999-99"
-    }
-  ]
-},
-
-{
-  "nome": "Pessoa F",
-  "cpf": "703.375.903-05",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa E",
+      "cpf": "703.375.903-04",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua E",
+          "numero": 14,
+          "bairro": "Bairro E",
+          "cidade": "Cidade E",
+          "estado": "Estado E",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua F",
-      "numero": 15,
-      "bairro": "Bairro F",
-      "cidade": "Cidade F",
-      "estado": "Estado F",
-      "cep": "99999-99"
-    }
-  ]
-},
-
-{
-  "nome": "Pessoa G",
-  "cpf": "999.999.999-06",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa F",
+      "cpf": "703.375.903-05",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua F",
+          "numero": 15,
+          "bairro": "Bairro F",
+          "cidade": "Cidade F",
+          "estado": "Estado F",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua G",
-      "numero": 16,
-      "bairro": "Bairro G",
-      "cidade": "Cidade G",
-      "estado": "Estado G",
-      "cep": "99999-99"
-    }
-  ]
-},
-
-
-{
-  "nome": "Pessoa H",
-  "cpf": "999.999.999-07",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa G",
+      "cpf": "999.999.999-06",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua G",
+          "numero": 16,
+          "bairro": "Bairro G",
+          "cidade": "Cidade G",
+          "estado": "Estado G",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua H",
-      "numero": 17,
-      "bairro": "Bairro H",
-      "cidade": "Cidade H",
-      "estado": "Estado H",
-      "cep": "99999-99"
-    }
-  ]
-},
-{
-  "nome": "Pessoa I",
-  "cpf": "999.999.999-08",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa H",
+      "cpf": "999.999.999-07",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua H",
+          "numero": 17,
+          "bairro": "Bairro H",
+          "cidade": "Cidade H",
+          "estado": "Estado H",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua I",
-      "numero": 18,
-      "bairro": "Bairro I",
-      "cidade": "Cidade I",
-      "estado": "Estado I",
-      "cep": "99999-99"
-    }
-  ]
-},
-{
-  "nome": "Pessoa J",
-  "cpf": "999.999.999-09",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa I",
+      "cpf": "999.999.999-08",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua I",
+          "numero": 18,
+          "bairro": "Bairro I",
+          "cidade": "Cidade I",
+          "estado": "Estado I",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua J",
-      "numero": 19,
-      "bairro": "Bairro J",
-      "cidade": "Cidade J",
-      "estado": "Estado J",
-      "cep": "99999-99"
-    }
-  ]
-},
-{
-  "nome": "Pessoa K",
-  "cpf": "999.999.999-10",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa J",
+      "cpf": "999.999.999-09",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua J",
+          "numero": 19,
+          "bairro": "Bairro J",
+          "cidade": "Cidade J",
+          "estado": "Estado J",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua J",
-      "numero": 20,
-      "bairro": "Bairro J",
-      "cidade": "Cidade J",
-      "estado": "Estado J",
-      "cep": "99999-99"
-    }
-  ]
-},
-
-{
-  "nome": "Pessoa L",
-  "cpf": "999.999.999-10",
-  "dataNascimento": "1990-01-01",
-  "enderecos": [
+      "nome": "Pessoa K",
+      "cpf": "999.999.999-10",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua J",
+          "numero": 20,
+          "bairro": "Bairro J",
+          "cidade": "Cidade J",
+          "estado": "Estado J",
+          "cep": "99999-99"
+        }
+      ]
+    },
     {
-      "rua": "Rua L",
-      "numero": 21,
-      "bairro": "Bairro L",
-      "cidade": "Cidade L",
-      "estado": "Estado L",
-      "cep": "99999-99"
+      "nome": "Pessoa L",
+      "cpf": "999.999.999-10",
+      "dataNascimento": "1990-01-01",
+      "enderecos": [
+        {
+          "rua": "Rua L",
+          "numero": 21,
+          "bairro": "Bairro L",
+          "cidade": "Cidade L",
+          "estado": "Estado L",
+          "cep": "99999-99"
+        }
+      ]
     }
   ]
 }
-
-]

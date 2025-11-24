@@ -1,8 +1,8 @@
 package br.tec.db.Pessoa.controller;
 
 import java.net.URI;
-import java.util.List;
 
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.tec.db.Pessoa.service.PessoaService;
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
+import br.tec.db.Pessoa.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -70,7 +70,8 @@ public class PessoaController {
       ),
   })
   @GetMapping("/")
-  public ResponseEntity<Page<PessoaResponseDto>> listarPessoas(Pageable pageable) {
+  @PageableAsQueryParam
+  public ResponseEntity<Page<PessoaResponseDto>> listarPessoas(@io.swagger.v3.oas.annotations.Parameter(hidden = true) Pageable pageable) {
     Page<PessoaResponseDto> pessoas = servicoPessoa.listarPessoas(pageable);
     return ResponseEntity.ok(pessoas);
   }
