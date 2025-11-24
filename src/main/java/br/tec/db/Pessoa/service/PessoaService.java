@@ -1,5 +1,6 @@
 package br.tec.db.Pessoa.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
+import br.tec.db.Pessoa.handler.PessoaNaoEncontradaException;
 import br.tec.db.Pessoa.map.EnderecoMapperInterface;
 import br.tec.db.Pessoa.map.PessoaMapperInterface;
 import br.tec.db.Pessoa.model.Endereco;
@@ -65,7 +67,8 @@ public class PessoaService {
           .map(enderecoMapper::toEntity)
           .collect(Collectors.toList());
 
-      entidadePessoa.getEnderecos().clear();
+     entidadePessoa.setEnderecos(new ArrayList<>(novosEnderecos));
+
 
       entidadePessoa.getEnderecos().addAll(novosEnderecos);
     }
@@ -82,6 +85,7 @@ public class PessoaService {
 
   public Pessoa retornaPessoaEncontrada(Long id){
     return repositorioPessoa.findById(id)
-        .orElseThrow();
+      .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa não encontrada com ID: " + id));
+
   }
 }

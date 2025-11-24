@@ -4,11 +4,11 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,6 +33,7 @@ import br.tec.db.Pessoa.builder.PessoaBuilder;
 import br.tec.db.Pessoa.controller.PessoaController;
 import br.tec.db.Pessoa.dto.PessoaRequestDto;
 import br.tec.db.Pessoa.dto.PessoaResponseDto;
+import br.tec.db.Pessoa.handler.PessoaNaoEncontradaException;
 import br.tec.db.Pessoa.service.PessoaService;
 
 @WebMvcTest(PessoaController.class)
@@ -74,30 +74,29 @@ public class PessoaControllerTest {
 
   @Test
   void listarUmaPessoaPorId_DeveRetornarStatus200_E_Pessoa() throws Exception {
-      PessoaResponseDto responseDto = PessoaBuilder.umUsuario().criarPessoaResponseDto();
+    PessoaResponseDto responseDto = PessoaBuilder.umUsuario().criarPessoaResponseDto();
 
-      when(servicoPessoa.listarUmaPessoaPorId(anyLong())).thenReturn(responseDto);
-
+    when(servicoPessoa.listarUmaPessoaPorId(anyLong())).thenReturn(responseDto);
   
     mockMvc.perform(get(BASE_URL +"/{id}", 1L)
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.nome").value("Joao Pedro"));
-  }
+   }
 
   @Test
   void listarUmaPessoaPorId_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
+      // Arrange
+      when(servicoPessoa.listarUmaPessoaPorId(99L))
+          .thenThrow(new PessoaNaoEncontradaException("Pessoa não encontrada."));
 
-    when(servicoPessoa.listarUmaPessoaPorId(99L)).thenThrow(NotFoundException.class);
-    doAnswer(invocation->{
-      throw new NotFoundException();
-    }).when(servicoPessoa).listarUmaPessoaPorId(99L);
+      // Act & Assert
+      mockMvc.perform(get(BASE_URL + "/{id}", 99L)
+              .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isNotFound());
 
-    mockMvc.perform(get(BASE_URL + "/{id}", 99L)
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotFound());
+      verify(servicoPessoa, times(1)).listarUmaPessoaPorId(99L);
   }
-
   @Test
   void deletarPessoa_DeveRetornarStatus204_QuandoExistente() throws Exception {
 
@@ -112,12 +111,13 @@ public class PessoaControllerTest {
   @Test
   void deletarPessoa_DeveRetornarStatus404_QuandoNaoEncontrada() throws Exception {
 
-    doAnswer(invocation->{
-      throw new NotFoundException();
-    }).when(servicoPessoa).deletarPessoa(99L);
+      doThrow(new PessoaNaoEncontradaException("Pessoa não encontrada"))
+          .when(servicoPessoa).deletarPessoa(99L);
 
-    mockMvc.perform(delete(BASE_URL + "/{id}", 99L))
-        .andExpect(status().isNotFound());
+      mockMvc.perform(delete(BASE_URL + "/{id}", 99L))
+          .andExpect(status().isNotFound());
+
+      verify(servicoPessoa, times(1)).deletarPessoa(99L);
   }
 
 
@@ -142,10 +142,7 @@ void atualizarPessoa_DeveRetornarStatus200_E_PessoaAtualizada() throws Exception
 
     PessoaRequestDto pessoaNaoEncontrada = new PessoaRequestDto("Pessoa", "000.000.000-00", LocalDate.of(1990, 1, 1), Arrays.asList());
 
-    when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaRequestDto.class))).thenThrow(NotFoundException.class);
-    doAnswer(invocation->{
-      throw new NotFoundException();
-    }).when(servicoPessoa).atualizarPessoa(99L, any(PessoaRequestDto.class));
+    when(servicoPessoa.atualizarPessoa(eq(99L), any(PessoaRequestDto.class))).thenThrow(new PessoaNaoEncontradaException("Pessoa não encontrada"));
     
     mockMvc.perform(put(BASE_URL + "/{id}", 99L)
         .contentType(MediaType.APPLICATION_JSON)

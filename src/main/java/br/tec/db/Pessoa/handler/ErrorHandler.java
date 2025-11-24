@@ -13,6 +13,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ErrorHandler {
 
+  @ExceptionHandler(PessoaNaoEncontradaException.class)
+  public ResponseEntity<ApiError> handlePessoaNaoEncontrada(PessoaNaoEncontradaException ex){
+      ApiError error = new ApiError(
+          ex.getMessage(),
+          HttpStatus.NOT_FOUND.value(),
+          LocalDateTime.now());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
 
   @ExceptionHandler(EmptyResultDataAccessException.class)
   public ResponseEntity<ApiError> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex){
