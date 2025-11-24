@@ -89,6 +89,6 @@ curl -x post http://localhost:8080/api/v1/pessoas \
 
 ### 📝 Trabalho Futuro (TODO)
 
-* [ ] 🚧 Ajustar o cálculo de idade.
-* [ ] 📈 Implementar paginação na consulta.
+* [X] 🚧 Ajustar o cálculo de idade.
+* [X] 📈 Implementar paginação na consulta.
 
